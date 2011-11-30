@@ -38,6 +38,13 @@ if (!class_exists('Random_Quote')):
             add_action('wprq_cron_hook', array($this, 'cron_func'));
             add_shortcode('random-quote', array($this, 'random_quote_shortcode'));
             add_action('admin_menu', array($this, 'CreateMenu'));
+            register_deactivation_hook(__FILE__, 'myplugin_deactivate');
+        }
+
+        //Clear psudo cron hook
+        function myplugin_deactivate() {
+            if (wp_get_schedule('wprq_cron_hook'))
+                wp_clear_scheduled_hook('wprq_cron_hook');
         }
 
         function cron_func() {
