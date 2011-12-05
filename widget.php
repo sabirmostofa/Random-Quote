@@ -11,7 +11,7 @@ class Random_Quote_Widget extends WP_Widget {
     function form($instance) {
         // outputs the options form on admin
         $defs = array(
-            'title' => 'A Quote from quotd.org',
+            'title' => 'A Quote from qotd.org',
             'interval' => 'hourly',
             'font-size'=>'12px'
         );

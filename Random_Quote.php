@@ -3,7 +3,7 @@
   Plugin Name: WP Random Quote
   Plugin URI: http://www.qotd.org
   Description: Display a random quote provided by QOTD.org in your sidebar as a widget or in a page/post using  shortcode. For more info:<a href="http://www.qotd.org/wp-plugin.html">www.qotd.org/wp-plugin.html</a>
-  Version: 1.0
+  Version: 1.0.1
   Author: Sabirul Mostofa
   Author URI: http//:sabirul-mostofa.blogspot.com
   License: GPLv2
@@ -50,6 +50,7 @@ if (!class_exists('Random_Quote')):
         function cron_func() {
             // updating the quotes
             $prev = get_option('wprq_random_quotes');
+            $existed_before = $prev;
             if (!$prev)
                 $prev = array();
             $quotes = array();
@@ -62,11 +63,19 @@ if (!class_exists('Random_Quote')):
                     $quote = trim($matches[1]);
                     if (!in_array($quote, $quotes) && !in_array($quote, $prev)) {
                         $quotes[] = $quote;
-                        if (++$count == 10)
+
+                        $count++;
+                        if ($existed_before) {
+                            if ($count == 1)
+                                break;
+                        }else
+                        if ($count == 10)
                             break;
                     }
                 endif;
             endfor;
+            $quotes = array_merge($prev,$quotes);
+            if(count($quotes) ==11)array_shift ($quotes);
             update_option('wprq_random_quotes', $quotes);
             return $quotes;
         }
